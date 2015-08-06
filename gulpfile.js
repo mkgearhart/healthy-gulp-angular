@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var gutil = require('gulp-util');
 var plugins = require('gulp-load-plugins')();
 var del = require('del');
 var es = require('event-stream');
@@ -57,7 +58,7 @@ pipes.builtAppScriptsProd = function() {
         .pipe(pipes.orderedAppScripts())
         .pipe(plugins.sourcemaps.init())
             .pipe(plugins.concat('app.min.js'))
-            .pipe(plugins.uglify())
+            .pipe(plugins.uglify().on('error', gutil.log))
         .pipe(plugins.sourcemaps.write())
         .pipe(gulp.dest(paths.distScriptsProd));
 };
@@ -71,7 +72,7 @@ pipes.builtVendorScriptsProd = function() {
     return gulp.src(bowerFiles())
         .pipe(pipes.orderedVendorScripts())
         .pipe(plugins.concat('vendor.min.js'))
-        .pipe(plugins.uglify())
+        .pipe(plugins.uglify().on('error', gutil.log))
         .pipe(gulp.dest(paths.distScriptsProd));
 };
 
